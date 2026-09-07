@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="it">
+<head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260907-05-0068bad","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/9e99ecf74af2a081.telemetry_sdk.js" integrity="sha512-tZ7fmfTx2KpCLjXQnEuL9azQ4A5+7+xumsx6r/WYVD0zCP/8LP8hDeCypMQesmP+WyAew4g7l5Ah23Bjd6yoVg=="></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Risorse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .editable {
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .editable:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        .editable:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .modal {
+            backdrop-filter: blur(8px);
+        }
+        
+        .resource-card {
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-code {
+            image-rendering: pixelated;
+        }
+    </style>
+<script src="/_sdk/fbe2ebfd64647c54.data_sdk.js" integrity="sha512-vkTX6CfvpHc3WbjK+tFJCaDuw4ERA4aEV/e5/7+MMJPMTF4RJYCI6CAwJBT/gtDW+dba4uLSsPUgDjVDHWtgUQ=="></script><script src="/_sdk/fcb6dc01f91829ac.resizing_sdk.js" integrity="sha512-YK8JfnN705qaEaVhiL7pcVB2Rs/BbdX5yxV55Az8zT/1JanyEWTw9HqCF915m9iV1YEaoil8qsjJz03l1Kb0Ug=="></script></head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 text-center editable" contenteditable="true" data-placeholder="Dashboard Risorse Didattiche">
+                Dashboard Risorse Didattiche
+            </h1>
+        </header>
+
+        <!-- Password Protection Bar -->
+        <div id="passwordBar" class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-md p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center text-white">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <span class="font-semibold">Modalità Solo Lettura - Inserisci password per modificare</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="password" id="passwordInput" placeholder="Password..." 
+                           class="px-4 py-2 rounded-lg border-0 focus:outline-none focus:ring-2 focus:ring-white text-gray-800">
+                    <button id="unlockBtn" class="bg-white text-red-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
+                        Sblocca
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Bar (hidden by default) -->
+        <div id="successBar" class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-md p-6 mb-8 hidden">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center text-white">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="font-semibold">Modalità Modifica Attiva - Puoi modificare la dashboard</span>
+                </div>
+                <button id="lockBtn" class="bg-white text-green-600 px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
+                    Blocca
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Cerca risorse..." 
+                       class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors">
+                <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Sections Container -->
+        <div id="sectionsContainer" class="space-y-8">
+            <!-- Sample Section -->
+            <div class="section bg-white rounded-2xl shadow-lg p-8">
+                <div class="mb-6 relative">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-3 editable" contenteditable="true" data-placeholder="Titolo Sezione">
+                                Risorse Generali
+                            </h2>
+                            <p class="text-gray-600 text-lg editable" contenteditable="true" data-placeholder="Descrizione della sezione">
+                                Raccolta di risorse utili per l'apprendimento e la ricerca
+                            </p>
+                        </div>
+                        <button class="delete-section-btn bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium ml-4" style="display: none;">
+                            <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Elimina Sezione
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Resources Grid -->
+                <div class="resources-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Resources will be added here -->
+                </div>
+                
+                <!-- Add Resource Button -->
+                <button class="add-resource-btn w-full py-4 border-2 border-dashed border-blue-300 text-blue-600 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all font-medium text-lg">
+                    <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Aggiungi Risorsa
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Section Button -->
+        <div class="mt-8 text-center">
+            <button id="addSectionBtn" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-4 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-semibold text-lg shadow-lg">
+                <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Aggiungi Sezione
+            </button>
+        </div>
+
+        <!-- Save Button -->
+        <div class="mt-8 text-center">
+            <button id="saveBtn" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-10 py-4 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all font-semibold text-lg shadow-lg">
+                <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+                Salva Modifiche
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Resource Modal -->
+    <div id="addResourceModal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Aggiungi Nuova Risorsa</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Titolo</label>
+                    <input type="text" id="resourceTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Inserisci il titolo">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrizione</label>
+                    <textarea id="resourceDescription" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3" placeholder="Inserisci la descrizione"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                    <input type="text" id="resourceUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="esempio.com, youtu.be/abc123, https://sito.it">
+                </div>
+            </div>
+            <div class="flex gap-4 mt-8">
+                <button id="cancelResourceBtn" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    Annulla
+                </button>
+                <button id="confirmResourceBtn" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    Aggiungi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Section Modal -->
+    <div id="addSectionModal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="text-2xl font-semibold mb-6 text-gray-800">Aggiungi Nuova Sezione</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Titolo Sezione</label>
+                    <input type="text" id="sectionTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Inserisci il titolo della sezione">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrizione</label>
+                    <textarea id="sectionDescription" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" rows="3" placeholder="Inserisci la descrizione della sezione"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-4 mt-8">
+                <button id="cancelSectionBtn" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    Annulla
+                </button>
+                <button id="confirmSectionBtn" class="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                    Aggiungi
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        // QR Code Generator - Functional implementation
+        function generateQRCode(text, size = 200) {
+            // Use QR Server API to generate real QR codes
+            const encodedText = encodeURIComponent(text);
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedText}&format=svg&margin=10`;
+            
+            // Create SVG that embeds the QR code as an image
+            return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+                <rect width="${size}" height="${size}" fill="white"/>
+                <image href="${qrUrl}" x="0" y="0" width="${size}" height="${size}"/>
+            </svg>`;
+        }
+
+        // Create resource card
+        function createResourceCard(title, description, url) {
+            const qrCode = generateQRCode(url, 120);
+            
+            const card = document.createElement('div');
+            card.className = 'resource-card bg-gray-50 rounded-xl p-6 border border-gray-200 cursor-pointer hover:shadow-lg transition-all';
+            
+            card.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2 editable" contenteditable="true">${title}</h3>
+                    <p class="text-gray-600 text-sm editable" contenteditable="true">${description}</p>
+                </div>
+                
+                <div class="flex items-center justify-center mb-4">
+                    <div class="qr-code border-2 border-gray-300 rounded-lg p-2 bg-white">
+                        ${qrCode}
+                    </div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button class="open-link-btn flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium" data-url="${url}">
+                        <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                        Apri
+                    </button>
+                    <button class="copy-link-btn bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium" data-url="${url}">
+                        <svg class="inline-block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </button>
+                    <button class="delete-resource-btn bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium" style="display: none;">
+                        <svg class="inline-block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            // Add click to expand functionality
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('button') && !e.target.closest('.editable')) {
+                    expandCard(card);
+                }
+            });
+            
+            return card;
+        }
+
+        // Expand card to fullscreen
+        function expandCard(card) {
+            const modal = document.createElement('div');
+            modal.className = 'fullscreen-modal';
+            
+            const cardClone = card.cloneNode(true);
+            cardClone.className = 'bg-white rounded-2xl p-12 max-w-2xl w-full mx-4 shadow-2xl transform scale-110';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'absolute top-8 right-8 text-white hover:text-gray-300 transition-colors';
+            closeBtn.innerHTML = `
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            `;
+            
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            modal.appendChild(closeBtn);
+            modal.appendChild(cardClone);
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+
+        // Create new section
+        function createSection(title, description) {
+            const section = document.createElement('div');
+            section.className = 'section bg-white rounded-2xl shadow-lg p-8';
+            
+            section.innerHTML = `
+                <div class="mb-6 relative">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-3 editable" contenteditable="true">${title}</h2>
+                            <p class="text-gray-600 text-lg editable" contenteditable="true">${description}</p>
+                        </div>
+                        <button class="delete-section-btn bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium ml-4" style="display: none;">
+                            <svg class="inline-block w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Elimina Sezione
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="resources-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                </div>
+                
+                <button class="add-resource-btn w-full py-4 border-2 border-dashed border-blue-300 text-blue-600 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all font-medium text-lg">
+                    <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Aggiungi Risorsa
+                </button>
+            `;
+            
+            return section;
+        }
+
+        // Copy functionality helpers
+        function showCopySuccess(btn) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<svg class="inline-block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+            btn.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+            btn.classList.add('bg-green-600', 'hover:bg-green-700');
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                btn.classList.add('bg-gray-600', 'hover:bg-gray-700');
+            }, 2000);
+        }
+        
+        function fallbackCopyText(text, btn) {
+            // Create temporary textarea for copying
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess(btn);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                // Show error feedback
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '❌';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Password protection system
+        let isEditMode = false;
+        let currentSection = null;
+        
+        // Password management functions
+        const FIXED_PASSWORD = "Artigi@no88";
+        
+        function checkPassword(password) {
+            return password === FIXED_PASSWORD;
+        }
+        
+        function enableEditMode() {
+            isEditMode = true;
+            
+            // Show success bar, hide password bar
+            document.getElementById('passwordBar').classList.add('hidden');
+            document.getElementById('successBar').classList.remove('hidden');
+            
+            // Enable all edit functionality
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = true;
+                el.style.pointerEvents = 'auto';
+            });
+            
+            // Show edit buttons
+            document.querySelectorAll('.add-resource-btn, #addSectionBtn, #saveBtn').forEach(btn => {
+                btn.style.display = 'block';
+                btn.disabled = false;
+            });
+            
+            // Show delete buttons - force visibility
+            document.querySelectorAll('.delete-resource-btn').forEach(btn => {
+                btn.style.display = 'inline-block';
+                btn.style.visibility = 'visible';
+                btn.disabled = false;
+            });
+            
+            document.querySelectorAll('.delete-section-btn').forEach(btn => {
+                btn.style.display = 'inline-block';
+                btn.style.visibility = 'visible';
+                btn.disabled = false;
+            });
+        }
+        
+        function disableEditMode() {
+            isEditMode = false;
+            
+            // Show password bar, hide success bar
+            document.getElementById('passwordBar').classList.remove('hidden');
+            document.getElementById('successBar').classList.add('hidden');
+            
+            // Disable all edit functionality
+            document.querySelectorAll('.editable').forEach(el => {
+                el.contentEditable = false;
+                el.style.pointerEvents = 'none';
+            });
+            
+            // Hide edit buttons
+            document.querySelectorAll('.add-resource-btn, #addSectionBtn, #saveBtn').forEach(btn => {
+                btn.style.display = 'none';
+                btn.disabled = true;
+            });
+            
+            // Hide delete buttons - force hiding
+            document.querySelectorAll('.delete-resource-btn').forEach(btn => {
+                btn.style.display = 'none';
+                btn.style.visibility = 'hidden';
+                btn.disabled = true;
+            });
+            
+            document.querySelectorAll('.delete-section-btn').forEach(btn => {
+                btn.style.display = 'none';
+                btn.style.visibility = 'hidden';
+                btn.disabled = true;
+            });
+            
+            // Clear password input
+            document.getElementById('passwordInput').value = '';
+        }
+        
+
+        
+        // Unlock button handler
+        document.getElementById('unlockBtn').addEventListener('click', () => {
+            const password = document.getElementById('passwordInput').value;
+            
+            if (checkPassword(password)) {
+                enableEditMode();
+            } else {
+                // Show error feedback
+                const input = document.getElementById('passwordInput');
+                input.classList.add('border-red-500');
+                input.placeholder = 'Password errata!';
+                input.value = '';
+                
+                setTimeout(() => {
+                    input.classList.remove('border-red-500');
+                    input.placeholder = 'Password...';
+                }, 2000);
+            }
+        });
+        
+        // Lock button handler
+        document.getElementById('lockBtn').addEventListener('click', () => {
+            disableEditMode();
+        });
+        
+        // Enter key support for password input
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('unlockBtn').click();
+            }
+        });
+
+        // Event listeners
+
+        // Add resource modal handlers
+        document.addEventListener('click', (e) => {
+            // Prevent event bubbling for delete buttons
+            if (e.target.closest('.delete-resource-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isEditMode) return;
+                
+                const resourceCard = e.target.closest('.resource-card');
+                const resourceTitle = resourceCard.querySelector('h3').textContent;
+                
+                if (confirm(`Sei sicuro di voler eliminare la risorsa "${resourceTitle}"?`)) {
+                    resourceCard.remove();
+                    scheduleAutoSave();
+                }
+                return;
+            }
+            
+            if (e.target.closest('.delete-section-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isEditMode) return;
+                
+                const section = e.target.closest('.section');
+                const sectionTitle = section.querySelector('h2').textContent;
+                const sectionsCount = document.querySelectorAll('.section').length;
+                
+                // Prevent deleting the last section
+                if (sectionsCount <= 1) {
+                    alert('Non puoi eliminare l\'ultima sezione rimasta!');
+                    return;
+                }
+                
+                if (confirm(`Sei sicuro di voler eliminare la sezione "${sectionTitle}" e tutte le sue risorse?`)) {
+                    section.remove();
+                    scheduleAutoSave();
+                }
+                return;
+            }
+            
+            if (e.target.closest('.add-resource-btn')) {
+                if (!isEditMode) return;
+                currentSection = e.target.closest('.section');
+                document.getElementById('addResourceModal').classList.remove('hidden');
+                document.getElementById('addResourceModal').classList.add('flex');
+            }
+            
+            if (e.target.closest('.open-link-btn')) {
+                const url = e.target.closest('.open-link-btn').dataset.url;
+                window.open(url, '_blank');
+            }
+            
+            if (e.target.closest('.copy-link-btn')) {
+                const url = e.target.closest('.copy-link-btn').dataset.url;
+                
+                // Try modern clipboard API first, fallback to older method
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        showCopySuccess(e.target.closest('.copy-link-btn'));
+                    }).catch(() => {
+                        fallbackCopyText(url, e.target.closest('.copy-link-btn'));
+                    });
+                } else {
+                    fallbackCopyText(url, e.target.closest('.copy-link-btn'));
+                }
+            }
+        });
+
+        // Modal close handlers
+        document.getElementById('cancelResourceBtn').addEventListener('click', () => {
+            document.getElementById('addResourceModal').classList.add('hidden');
+            document.getElementById('addResourceModal').classList.remove('flex');
+            document.getElementById('resourceTitle').value = '';
+            document.getElementById('resourceDescription').value = '';
+            document.getElementById('resourceUrl').value = '';
+        });
+
+        document.getElementById('confirmResourceBtn').addEventListener('click', () => {
+            const title = document.getElementById('resourceTitle').value.trim();
+            const description = document.getElementById('resourceDescription').value.trim();
+            let url = document.getElementById('resourceUrl').value.trim();
+            
+            if (title && url) {
+                // Normalize URL - add https:// if missing protocol
+                if (!url.match(/^https?:\/\//)) {
+                    url = 'https://' + url;
+                }
+                
+                const resourceCard = createResourceCard(title, description || 'Nessuna descrizione', url);
+                const grid = currentSection.querySelector('.resources-grid');
+                grid.appendChild(resourceCard);
+                
+                // Show delete button if in edit mode
+                if (isEditMode) {
+                    const deleteBtn = resourceCard.querySelector('.delete-resource-btn');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'inline-block';
+                        deleteBtn.style.visibility = 'visible';
+                    }
+                }
+                
+                document.getElementById('addResourceModal').classList.add('hidden');
+                document.getElementById('addResourceModal').classList.remove('flex');
+                document.getElementById('resourceTitle').value = '';
+                document.getElementById('resourceDescription').value = '';
+                document.getElementById('resourceUrl').value = '';
+                
+                // Auto-save after adding resource
+                scheduleAutoSave();
+            }
+        });
+
+        // Add section handlers
+        document.getElementById('addSectionBtn').addEventListener('click', () => {
+            if (!isEditMode) return;
+            document.getElementById('addSectionModal').classList.remove('hidden');
+            document.getElementById('addSectionModal').classList.add('flex');
+        });
+
+        document.getElementById('cancelSectionBtn').addEventListener('click', () => {
+            document.getElementById('addSectionModal').classList.add('hidden');
+            document.getElementById('addSectionModal').classList.remove('flex');
+            document.getElementById('sectionTitle').value = '';
+            document.getElementById('sectionDescription').value = '';
+        });
+
+        document.getElementById('confirmSectionBtn').addEventListener('click', () => {
+            const title = document.getElementById('sectionTitle').value.trim();
+            const description = document.getElementById('sectionDescription').value.trim();
+            
+            if (title) {
+                const newSection = createSection(title, description || 'Nessuna descrizione');
+                document.getElementById('sectionsContainer').appendChild(newSection);
+                
+                // Show delete button if in edit mode
+                if (isEditMode) {
+                    const deleteBtn = newSection.querySelector('.delete-section-btn');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'inline-block';
+                        deleteBtn.style.visibility = 'visible';
+                    }
+                }
+                
+                document.getElementById('addSectionModal').classList.add('hidden');
+                document.getElementById('addSectionModal').classList.remove('flex');
+                document.getElementById('sectionTitle').value = '';
+                document.getElementById('sectionDescription').value = '';
+                
+                // Auto-save after adding section
+                scheduleAutoSave();
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const resourceCards = document.querySelectorAll('.resource-card');
+            
+            resourceCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+        });
+
+        // Enhanced save functionality for Canva environment
+        function saveDashboardData() {
+            const dashboardData = {
+                title: document.querySelector('header h1').textContent,
+                sections: [],
+                timestamp: new Date().toISOString()
+            };
+            
+            document.querySelectorAll('.section').forEach(section => {
+                const sectionData = {
+                    title: section.querySelector('h2').textContent,
+                    description: section.querySelector('p').textContent,
+                    resources: []
+                };
+                
+                section.querySelectorAll('.resource-card').forEach(card => {
+                    const resourceData = {
+                        title: card.querySelector('h3').textContent,
+                        description: card.querySelector('p').textContent,
+                        url: card.querySelector('.open-link-btn').dataset.url
+                    };
+                    sectionData.resources.push(resourceData);
+                });
+                
+                dashboardData.sections.push(sectionData);
+            });
+            
+            // Multiple storage methods for maximum compatibility
+            try {
+                // Primary storage method
+                localStorage.setItem('canva_dashboard_data', JSON.stringify(dashboardData));
+                
+                // Backup storage in sessionStorage
+                sessionStorage.setItem('canva_dashboard_backup', JSON.stringify(dashboardData));
+                
+                // Store in a hidden element as additional backup
+                let hiddenStorage = document.getElementById('hiddenDataStorage');
+                if (!hiddenStorage) {
+                    hiddenStorage = document.createElement('div');
+                    hiddenStorage.id = 'hiddenDataStorage';
+                    hiddenStorage.style.display = 'none';
+                    document.body.appendChild(hiddenStorage);
+                }
+                hiddenStorage.textContent = JSON.stringify(dashboardData);
+                
+                return true;
+            } catch (error) {
+                console.error('Save failed:', error);
+                return false;
+            }
+        }
+        
+        // Auto-save functionality
+        function autoSave() {
+            saveDashboardData();
+        }
+        
+        // Save button handler
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            if (!isEditMode) return;
+            const success = saveDashboardData();
+            
+            const btn = document.getElementById('saveBtn');
+            const originalText = btn.innerHTML;
+            
+            if (success) {
+                btn.innerHTML = `
+                    <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Salvato!
+                `;
+                btn.classList.add('from-green-500', 'to-green-600');
+                btn.classList.remove('from-purple-500', 'to-purple-600');
+            } else {
+                btn.innerHTML = `
+                    <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Errore!
+                `;
+                btn.classList.add('from-red-500', 'to-red-600');
+                btn.classList.remove('from-purple-500', 'to-purple-600');
+            }
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('from-green-500', 'to-green-600', 'from-red-500', 'to-red-600');
+                btn.classList.add('from-purple-500', 'to-purple-600');
+            }, 3000);
+        });
+        
+        // Auto-save on changes
+        let autoSaveTimeout;
+        function scheduleAutoSave() {
+            if (!isEditMode) return;
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(autoSave, 2000); // Auto-save after 2 seconds of inactivity
+        }
+
+        // Enhanced load functionality for Canva environment
+        function loadDashboardData() {
+            let savedData = null;
+            
+            // Try multiple storage sources
+            try {
+                // Try primary storage
+                savedData = localStorage.getItem('canva_dashboard_data');
+                
+                // Fallback to backup storage
+                if (!savedData) {
+                    savedData = sessionStorage.getItem('canva_dashboard_backup');
+                }
+                
+                // Fallback to hidden element storage
+                if (!savedData) {
+                    const hiddenStorage = document.getElementById('hiddenDataStorage');
+                    if (hiddenStorage) {
+                        savedData = hiddenStorage.textContent;
+                    }
+                }
+                
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    
+                    // Update title
+                    document.querySelector('header h1').textContent = data.title;
+                    
+                    // Clear existing sections except the first one
+                    const container = document.getElementById('sectionsContainer');
+                    const firstSection = container.querySelector('.section');
+                    
+                    // Update first section
+                    if (data.sections.length > 0) {
+                        const firstSectionData = data.sections[0];
+                        firstSection.querySelector('h2').textContent = firstSectionData.title;
+                        firstSection.querySelector('p').textContent = firstSectionData.description;
+                        
+                        const grid = firstSection.querySelector('.resources-grid');
+                        grid.innerHTML = '';
+                        
+                        firstSectionData.resources.forEach(resource => {
+                            const card = createResourceCard(resource.title, resource.description, resource.url);
+                            grid.appendChild(card);
+                        });
+                    }
+                    
+                    // Add additional sections
+                    for (let i = 1; i < data.sections.length; i++) {
+                        const sectionData = data.sections[i];
+                        const section = createSection(sectionData.title, sectionData.description);
+                        
+                        const grid = section.querySelector('.resources-grid');
+                        sectionData.resources.forEach(resource => {
+                            const card = createResourceCard(resource.title, resource.description, resource.url);
+                            grid.appendChild(card);
+                        });
+                        
+                        container.appendChild(section);
+                        
+                        // Ensure delete buttons are properly hidden initially
+                        const deleteBtn = section.querySelector('.delete-section-btn');
+                        if (deleteBtn) {
+                            deleteBtn.style.display = 'none';
+                            deleteBtn.style.visibility = 'hidden';
+                        }
+                        
+                        // Hide delete buttons on resources too
+                        section.querySelectorAll('.delete-resource-btn').forEach(btn => {
+                            btn.style.display = 'none';
+                            btn.style.visibility = 'hidden';
+                        });
+                    }
+                    
+                    return true;
+                }
+            } catch (error) {
+                console.error('Load failed:', error);
+            }
+            
+            return false;
+        }
+        
+        // Initialize application
+        window.addEventListener('load', () => {
+            // Start in locked mode
+            disableEditMode();
+            
+            // Try to load saved data
+            const loaded = loadDashboardData();
+            
+            if (!loaded) {
+                // If no saved data, ensure clean initial state
+                const container = document.getElementById('sectionsContainer');
+                const firstSection = container.querySelector('.section');
+                
+                // Clear the resources grid in the first section
+                const grid = firstSection.querySelector('.resources-grid');
+                grid.innerHTML = '';
+                
+                // Remove any additional sections beyond the first one
+                const sections = container.querySelectorAll('.section');
+                for (let i = 1; i < sections.length; i++) {
+                    sections[i].remove();
+                }
+            }
+            
+            // Set up auto-save listeners for editable content
+            document.addEventListener('input', (e) => {
+                if (e.target.classList.contains('editable') && isEditMode) {
+                    scheduleAutoSave();
+                }
+            });
+            
+            // Auto-save on blur for editable elements
+            document.addEventListener('blur', (e) => {
+                if (e.target.classList.contains('editable') && isEditMode) {
+                    scheduleAutoSave();
+                }
+            }, true);
+        });
+    </script>
+<script src="/_sdk/92570d8e491862b9.editing_sdk.js" integrity="sha512-FgTgBgZOGUl1XBrojWdmYvV2Ka+jYLWeeIrMhp1Q1xMV3FJfF+VJFjO6hw+EDGnXYa+zMZXNIP5UYLxGsdfP6g=="></script></body>
+</html>
